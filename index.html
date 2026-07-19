@@ -6,67 +6,44 @@
 <title>Project MO</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:#000;
-overflow:hidden;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+    margin:0;
+    background:#000;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow:hidden;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
+#stars{
+    position:fixed;
+    inset:0;
+    background:black;
 }
 
-#content{
-text-align:center;
-animation:fade 2s;
-padding:20px;
+.center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
 }
 
 h1{
-font-size:70px;
-margin-bottom:15px;
+    font-size:4rem;
+    letter-spacing:10px;
 }
 
 p{
-font-size:22px;
-opacity:.8;
-margin-bottom:30px;
+    opacity:.8;
 }
 
 button{
-padding:15px 35px;
-font-size:20px;
-border:none;
-border-radius:40px;
-cursor:pointer;
-background:white;
-color:black;
-transition:.3s;
-}
-
-button:hover{
-transform:scale(1.08);
-}
-
-@keyframes fade{
-from{opacity:0;}
-to{opacity:1;}
+    margin-top:20px;
+    padding:14px 28px;
+    border:none;
+    border-radius:40px;
+    font-size:18px;
+    cursor:pointer;
 }
 </style>
 
@@ -76,27 +53,28 @@ to{opacity:1;}
 
 <canvas id="stars"></canvas>
 
-<div id="content">
-
+<div class="center">
 <h1>MO</h1>
 
 <p>Oops... you found me.</p>
 
-<button onclick="explore()">Start Exploring</button>
-
+<button onclick="start()">Start Exploring</button>
 </div>
 
 <script>
-
 const canvas=document.getElementById("stars");
 const ctx=canvas.getContext("2d");
 
+function resize(){
 canvas.width=innerWidth;
 canvas.height=innerHeight;
+}
+resize();
+onresize=resize;
 
-let stars=[];
+const stars=[];
 
-for(let i=0;i<200;i++){
+for(let i=0;i<250;i++){
 stars.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
@@ -104,38 +82,36 @@ r:Math.random()*2
 });
 }
 
-function draw(){
+function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
 ctx.fillStyle="white";
 
-stars.forEach(s=>{
+for(const s of stars){
 
 ctx.beginPath();
-
 ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-
 ctx.fill();
 
-s.y+=0.2;
+s.y+=0.3;
 
-if(s.y>canvas.height)s.y=0;
-
-});
-
-requestAnimationFrame(draw);
+if(s.y>canvas.height){
+s.y=0;
+s.x=Math.random()*canvas.width;
+}
 
 }
 
-draw();
-
-function explore(){
-
-alert("🚀 Welcome to Project MO! Version 1.0");
+requestAnimationFrame(animate);
 
 }
 
+animate();
+
+function start(){
+alert("Project MO v1.0 🚀");
+}
 </script>
 
 </body>
