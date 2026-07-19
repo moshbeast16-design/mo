@@ -1,468 +1,241 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Vault - Game Entrance</title>
-    <style>
-        :root {
-            --neon-blue: #00f0ff;
-            --neon-glow: rgba(0, 240, 255, 0.4);
-            --bg-dark: #05050a;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Vault</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
+<style>
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: var(--bg-dark);
-            font-family: 'Courier New', Courier, monospace;
-            color: #ffffff;
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
 
-        /* Layered Canvas Backgrounds */
-        #starfieldCanvas, #effectCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+body{
+background:#020814;
+color:white;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
 
-        #effectCanvas {
-            z-index: 2;
-        }
+/* Animated Stars */
 
-        /* Interface Overlay Container */
-        .interface-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
-        }
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:200%;
+height:200%;
+background:
+radial-gradient(white 1px, transparent 1px);
+background-size:60px 60px;
+animation:stars 140s linear infinite;
+opacity:.75;
+}
 
-        /* Cinematic Intro Components */
-        .intro-sequence {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-            padding: 20px;
-        }
+@keyframes stars{
+from{transform:translateY(0);}
+to{transform:translateY(-1200px);}
+}
 
-        .searching-text {
-            font-size: 1.5rem;
-            letter-spacing: 0.5rem;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-glow);
-            text-transform: uppercase;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
+.container{
+position:relative;
+z-index:2;
+width:90%;
+max-width:700px;
+text-align:center;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(10px);
+padding:40px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,.12);
+box-shadow:0 0 40px rgba(0,220,255,.15);
+}
 
-        .status-log {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-            height: 20px;
-            min-width: 300px;
-        }
+.crystal{
+font-size:80px;
+animation:float 4s ease-in-out infinite;
+margin-bottom:10px;
+}
 
-        /* Main Game Entrance UI */
-        .vault-ui {
-            display: none;
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 1.5s ease, transform 1.5s ease;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
-            max-width: 500px;
-            padding: 40px;
-            background: rgba(5, 5, 15, 0.75);
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 25px var(--neon-glow), inset 0 0 15px rgba(0, 240, 255, 0.1);
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-        }
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-12px);}
+}
 
-        .vault-ui.visible {
-            display: flex;
-            opacity: 1;
-            transform: scale(1);
-        }
+h1{
+font-size:58px;
+letter-spacing:8px;
+color:#8defff;
+cursor:pointer;
+text-shadow:
+0 0 10px #00d9ff,
+0 0 30px #00d9ff,
+0 0 60px #00d9ff;
+}
 
-        h1.title {
-            font-size: 2.5rem;
-            letter-spacing: 0.8rem;
-            color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-glow);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--neon-blue);
-            padding-bottom: 10px;
-            width: 100%;
-            text-align: center;
-        }
+.subtitle{
+margin:15px 0 30px;
+font-size:20px;
+opacity:.85;
+}
 
-        /* Holographic Interactive Lock Grid */
-        .lock-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 35px;
-            width: 100%;
-        }
+.section{
+font-size:18px;
+line-height:2;
+}
 
-        .grid-node {
-            aspect-ratio: 1;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            background: rgba(0, 240, 255, 0.03);
-            border-radius: 4px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+button{
+margin-top:35px;
+padding:18px 45px;
+border:none;
+border-radius:50px;
+background:#00d9ff;
+color:#00131a;
+font-size:22px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
 
-        .grid-node::before {
-            content: '';
-            width: 30%;
-            height: 30%;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px cyan;
+}
 
-        .grid-node:hover {
-            background: rgba(0, 240, 255, 0.1);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-glow);
-        }
+.footer{
+margin-top:25px;
+font-size:14px;
+opacity:.6;
+font-style:italic;
+}
 
-        .grid-node.active::before {
-            background: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-            width: 45%;
-            height: 45%;
-        }
+#message{
+margin-top:25px;
+font-size:18px;
+color:#8defff;
+display:none;
+}
 
-        /* Action Controls */
-        .btn-enter {
-            width: 100%;
-            padding: 15px;
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: #ffffff;
-            font-family: inherit;
-            font-size: 1.1rem;
-            letter-spacing: 0.3rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .btn-enter:hover {
-            background: var(--neon-blue);
-            color: var(--bg-dark);
-            box-shadow: 0 0 20px var(--neon-blue);
-            font-weight: bold;
-        }
-
-        /* Keyframe Utility Rules */
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
-        }
-
-        /* Mobile Optimization overrides */
-        @media (max-width: 480px) {
-            .vault-ui {
-                padding: 25px 15px;
-            }
-            h1.title {
-                font-size: 1.8rem;
-                letter-spacing: 0.4rem;
-            }
-            .grid-node {
-                gap: 10px;
-            }
-        }
-    </style>
+</style>
 </head>
+
 <body>
 
-    <canvas id="starfieldCanvas"></canvas>
-    <canvas id="effectCanvas"></canvas>
+<div class="container">
 
-    <div class="interface-container">
-        <!-- Cinematic Intro Component -->
-        <div id="introSequence" class="intro-sequence">
-            <div id="searchingLabel" class="searching-text">Searching...</div>
-            <div id="statusLog" class="status-log">Initializing deep space scans...</div>
-        </div>
+<div class="crystal">💎</div>
 
-        <!-- Explorable UI Panel -->
-        <div id="vaultUi" class="vault-ui">
-            <h1 class="title">The Vault</h1>
-            <div class="lock-grid" id="lockGrid">
-                <div class="grid-node" data-index="0"></div>
-                <div class="grid-node" data-index="1"></div>
-                <div class="grid-node" data-index="2"></div>
-                <div class="grid-node" data-index="3"></div>
-                <div class="grid-node" data-index="4"></div>
-                <div class="grid-node" data-index="5"></div>
-                <div class="grid-node" data-index="6"></div>
-                <div class="grid-node" data-index="7"></div>
-                <div class="grid-node" data-index="8"></div>
-            </div>
-            <button class="btn-enter" id="btnEnter">Bypass Gate</button>
-        </div>
-    </div>
+<h1 id="vaultTitle">THE VAULT</h1>
 
-    <script>
-        const canvasStars = document.getElementById('starfieldCanvas');
-        const ctxStars = canvasStars.getContext('2d');
-        const canvasFX = document.getElementById('effectCanvas');
-        const ctxFX = canvasFX.getContext('2d');
+<div class="subtitle">
+A hidden world where curiosity unlocks reality.
+</div>
 
-        // UI Target references
-        const introSequence = document.getElementById('introSequence');
-        const searchingLabel = document.getElementById('searchingLabel');
-        const statusLog = document.getElementById('statusLog');
-        const vaultUi = document.getElementById('vaultUi');
-        const lockGrid = document.getElementById('lockGrid');
-        const btnEnter = document.getElementById('btnEnter');
+<div class="section">
 
-        let width = window.innerWidth;
-        let height = window.innerHeight;
+<h2>🚧 UNDER CONSTRUCTION 🚧</h2>
 
-        // Visual State variables
-        let stars = [];
-        let crystalParticles = [];
-        let starSpeedMultiplier = 0.5;
-        let lensFocusProgress = 0; 
-        let crystalAssemblyProgress = 0; 
-        let phase = 'searching'; // searching -> focusing -> assembling -> ready -> hyperspace
+<br>
 
-        // Configure Canvas Dimensions
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvasStars.width = width;
-            canvasStars.height = height;
-            canvasFX.width = width;
-            canvasFX.height = height;
-            initStars();
-        }
+A new world is taking shape.
 
-        // Generate Star Matrix array
-        function initStars() {
-            stars = [];
-            const count = Math.min(width * 0.4, 400);
-            for(let i = 0; i < count; i++) {
-                stars.push({
-                    x: Math.random() * width - width / 2,
-                    y: Math.random() * height - height / 2,
-                    z: Math.random() * width,
-                    color: Math.random() > 0.8 ? '#00f0ff' : '#ffffff'
-                });
-            }
-        }
+<br><br>
 
-        window.addEventListener('resize', resize);
-        resize();
+💎 Rare Minerals<br>
+🐾 Extraordinary Animals<br>
+📚 Wisdom & Knowledge<br>
+🌍 The Wonders of Earth<br>
+🌌 Hidden Places<br>
+🏛️ Secret Chambers<br>
+🃏 Collectibles<br>
+👓 The Optics Workshop
 
-        // Sequential state strings for terminal effect
-        const bootLogs = [
-            "Establishing quantum handshake...",
-            "Analyzing spatial anomalies...",
-            "Mapping starfield anchor nodes...",
-            "Target confirmed. Locking coordinates..."
-        ];
-        let logIndex = 0;
+<br><br>
 
-        const logTimer = setInterval(() => {
-            if (logIndex < bootLogs.length) {
-                statusLog.innerText = bootLogs[logIndex];
-                logIndex++;
-            } else {
-                clearInterval(logTimer);
-                triggerLensFocusPhase();
-            }
-        }, 1200);
+<b>Every object has a story.</b>
 
-        function triggerLensFocusPhase() {
-            phase = 'focusing';
-            searchingLabel.innerText = "Focusing Optical Array";
-            statusLog.style.display = 'none';
-        }
+<br>
 
-        function triggerCrystalAssembly() {
-            phase = 'assembling';
+<b>Every discovery teaches something real.</b>
 
-searchingLabel.innerText = "Assembling Matrix Core";
-// Populate crystal geometry nodes
-const nodeCount = 60;
-for(let i=0; i<nodeCount; i++) {
-crystalParticles.push({
-originX: (Math.random() - 0.5) * width * 1.5 + width/2,
-originY: (Math.random() - 0.5) * height * 1.5 + height/2,
-targetX: width / 2 + Math.cos(i * (Math.PI * 2 / nodeCount)) * (80 + (i % 3) * 20),
-targetY: height / 2 + Math.sin(i * (Math.PI * 2 / nodeCount)) * (80 + (i % 3) * 20),
-size: Math.random() * 2 + 1,
-alpha: Math.random() * 0.5 + 0.5
-});
+</div>
+
+<button onclick="enterVault()">
+🔓 ENTER PROTOTYPE
+</button>
+
+<div id="message"></div>
+
+<div class="footer">
+✨ Look closely... not everything is obvious. ✨
+</div>
+
+</div>
+
+<script>
+
+function enterVault(){
+
+if(navigator.vibrate){
+navigator.vibrate([100,50,100]);
 }
-}
-function revealMainInterface() {
-phase = 'ready';
-introSequence.style.display = 'none';
-vaultUi.classList.add('visible');
-}
-// Frame update pipeline loop
-function draw() {
-// Render Starfield Background Canvas
-ctxStars.fillStyle = 'rgba(5, 5, 10, 0.2)';
-ctxStars.fillRect(0, 0, width, height);
-ctxStars.fillStyle = '#ffffff';
-const cx = width / 2;
-const cy = height / 2;
-for (let i = 0; i < stars.length; i++) {
-let s = stars[i];
-s.z -= starSpeedMultiplier;
-if (s.z <= 0) {
-s.z = width;
-s.x = Math.random() * width - cx;
-s.y = Math.random() * height - cy;
-}
-let px = (s.x / s.z) * width + cx;
-let py = (s.y / s.z) * height + cy;
-if (px < 0 || px > width || py < 0 || py > height) continue;
-let size = (1 - s.z / width) * 4;
-ctxStars.fillStyle = s.color;
-ctxStars.beginPath();
-ctxStars.arc(px, py, size, 0, Math.PI * 2);
-ctxStars.fill();
-}
-// Render Dynamic Overlays on top Canvas
-ctxFX.clearRect(0, 0, width, height);
-if (phase === 'focusing') {
-lensFocusProgress += 0.01;
-let blurRadius = (1 - lensFocusProgress) * 40;
-// Ring focusing animations
-ctxFX.strokeStyle = rgba(0, 240, 255, ${Math.min(lensFocusProgress, 0.7)});
-ctxFX.lineWidth = 2;
-ctxFX.beginPath();
-ctxFX.arc(cx, cy, 100 + blurRadius, 0, Math.PI * 2);
-ctxFX.stroke();
-ctxFX.strokeStyle = rgba(255, 255, 255, ${Math.min(lensFocusProgress, 0.4)});
-ctxFX.beginPath();
-ctxFX.arc(cx, cy, 140 - blurRadius, 0, Math.PI * 2);
-ctxFX.stroke();
-if (lensFocusProgress >= 1) {
-triggerCrystalAssembly();
-}
-}
-if (phase === 'assembling') {
-crystalAssemblyProgress += 0.015;
-ctxFX.strokeStyle = rgba(0, 240, 255, ${0.2 * (1 - crystalAssemblyProgress)});
-ctxFX.fillStyle = rgba(0, 240, 255, 0.6);
-crystalParticles.forEach(p => {
-// Linear interpolate path vectors
-let currX = p.originX + (p.targetX - p.originX) * Math.min(crystalAssemblyProgress, 1);
-let currY = p.originY + (p.targetY - p.originY) * Math.min(crystalAssemblyProgress, 1);
-ctxFX.beginPath();
-ctxFX.arc(currX, currY, p.size, 0, Math.PI * 2);
-ctxFX.fill();
-if(Math.random() > 0.96) {
-ctxFX.beginPath();
-ctxFX.moveTo(cx, cy);
-ctxFX.lineTo(currX, currY);
-ctxFX.stroke();
-}
-});
-if (crystalAssemblyProgress >= 1.2) {
-revealMainInterface();
-}
-}
-if (phase === 'hyperspace') {
-// Instantly accelerate movement engine vector
-if (starSpeedMultiplier < 45) starSpeedMultiplier += 0.8;
-// Overlay blinding flash sequence
-ctxFX.fillStyle = rgba(255, 255, 255, ${Math.min((starSpeedMultiplier/45), 1)});
-ctxFX.fillRect(0, 0, width, height);
-if (starSpeedMultiplier >= 45) {
-// Terminal state sequence reset
-phase = 'arrived';
-alert("System bypassed. Welcome to The Vault core node.");
-window.location.reload();
-}
-}
-requestAnimationFrame(draw);
-}
-// Interactive Matrix lock grid puzzle simulation
-let matrixSequence = [];
-lockGrid.addEventListener('click', (e) => {
-if (!e.target.classList.contains('grid-node')) return;
-const node = e.target;
-node.classList.toggle('active');
-const index = node.getAttribute('data-index');
-// Audio-visual pop cue via Javascript Canvas drawing
-ctxFX.fillStyle = 'rgba(0, 240, 255, 0.4)';
-ctxFX.beginPath();
-ctxFX.arc(width/2, height/2, 200, 0, Math.PI * 2);
-ctxFX.fill();
-});
-// Trigger Hyperspace Transition sequence
-btnEnter.addEventListener('click', () => {
-vaultUi.style.opacity = '0';
-vaultUi.style.transform = 'scale(1.1)';
-setTimeout(() => {
-vaultUi.style.display = 'none';
-phase = 'hyperspace';
-}, 500);
-});
-// Run animation pipeline execution
-requestAnimationFrame(draw);
 
+const msg=document.getElementById("message");
+msg.style.display="block";
 
+let steps=[
+"Searching...",
+"Locating The Vault...",
+"Initializing...",
+"The Vault is still awakening...",
+"Thank you for visiting, Explorer."
+];
 
-### Features Built into This Code
-1. **Animated Starfield:** Renders on an background canvas using 3D depth formulas projection via pure JavaScript.
-2. **"Searching..." Boot Loader Sequence:** Simulates an authentic automated terminal check using set state schedules.
-3. **Lens Focusing Mechanism:** Uses concentric geometry tracking that narrows directly down on the screen center viewport.
-4. **Crystal Matrix Assembly:** Generates dozens of external particles that track paths from outer screen boundaries inward to construct a core geometry web ring.
-5. **Interactive Grid:** A responsive mobile panel allowing nodes to toggle when clicked, creating a tactile lock-screen pattern interface.
-6. **Hyperspace Jump Execution:** Instantly accelerates the starfield speed multiplier vector dynamically into long light-streaks when clicking **"Bypass Gate"**, finishing with an intense, pure-white systemic transition flash.
+let i=0;
 
-### How to Publish to GitHub Pages
-1. Create a repository on your **GitHub** profile.
-2. Commit this exact file named explicitly as **`index.html`** into the repository root.
-3. Head to repository **Settings** → **Pages**.
-4. Set the build source parameter to the `main` or `master` branch and click **Save**. 
+msg.innerHTML=steps[0];
 
-Would you like to **add ambient sound effects / music triggers**, or expand the interactive lock panel into an **actual puzzle verification check** next?
+let timer=setInterval(()=>{
 
+i++;
 
+if(i<steps.length){
+
+msg.innerHTML=steps[i];
+
+}else{
+
+clearInterval(timer);
+
+}
+
+},1400);
+
+}
+
+let taps=0;
+
+document.getElementById("vaultTitle").onclick=function(){
+
+taps++;
+
+if(taps==10){
+
+alert("🏅 Achievement Unlocked!\n\nCurious Explorer\n\nYou looked a little closer than most.");
+
+}
+
+};
+
+</script>
+
+</body>
+</html>
