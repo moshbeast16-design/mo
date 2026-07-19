@@ -11,27 +11,33 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#02040a;
-overflow:hidden;
-font-family:Arial,sans-serif;
+background:#020814;
 color:white;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-/* Stars */
+/* Animated Stars */
 
-body:before{
+body::before{
 content:"";
 position:fixed;
+top:0;
+left:0;
 width:200%;
 height:200%;
 background:
 radial-gradient(white 1px, transparent 1px);
-background-size:55px 55px;
-animation:stars 120s linear infinite;
-opacity:.8;
+background-size:60px 60px;
+animation:stars 140s linear infinite;
+opacity:.75;
 }
 
 @keyframes stars{
@@ -39,238 +45,7 @@ from{transform:translateY(0);}
 to{transform:translateY(-1200px);}
 }
 
-/* Main */
-
-.main{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-width:90%;
-max-width:700px;
-z-index:10;
-}
-
-/* Crystal */
-
-.crystal{
-
-font-size:90px;
-animation:float 5s ease-in-out infinite,
-glow 2.5s infinite alternate;
-
-cursor:pointer;
-
-}
-
-@keyframes float{
-
-0%,100%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-18px);
-}
-
-}
-
-@keyframes glow{
-
-from{
-filter:drop-shadow(0 0 10px cyan);
-}
-
-to{
-filter:drop-shadow(0 0 40px #5ffcff);
-}
-
-}
-
-/* Title */
-
-h1{
-
-font-size:70px;
-
-letter-spacing:8px;
-
-margin:20px;
-
-text-shadow:
-0 0 20px cyan,
-0 0 60px cyan;
-
-}
-
-/* Subtitle */
-
-.sub{
-
-font-size:22px;
-
-opacity:.9;
-
-margin-bottom:35px;
-
-}
-
-/* Box */
-
-.box{
-
-background:rgba(255,255,255,.06);
-
-border:1px solid rgba(255,255,255,.2);
-
-padding:35px;
-
-border-radius:22px;
-
-backdrop-filter:blur(8px);
-
-box-shadow:0 0 35px rgba(0,255,255,.25);
-
-}
-
-/* Button */
-
-button{
-
-margin-top:35px;
-
-padding:18px 40px;
-
-border:none;
-
-border-radius:50px;
-
-font-size:22px;
-
-cursor:pointer;
-
-background:#14d8ff;
-
-color:black;
-
-font-weight:bold;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:scale(1.08);
-
-box-shadow:0 0 25px cyan;
-
-}
-
-/* Footer */
-
-.footer{
-
-margin-top:35px;
-
-opacity:.8;
-
-font-style:italic;
-
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="main">
-
-<div class="crystal">💎</div>
-
-<h1>THE VAULT</h1>
-
-<div class="sub">
-A hidden world where curiosity unlocks reality.
-</div>
-
-<div class="box">
-
-<h2>🚧 Under Construction 🚧</h2>
-
-<br>
-
-<p>
-Something extraordinary is awakening.
-</p>
-
-<br>
-
-<p>
-
-💎 Real Minerals<br><br>
-
-🐾 Extraordinary Animals<br><br>
-
-📚 Knowledge & Wisdom<br><br>
-
-🌌 Hidden Worlds<br><br>
-
-🏛️ Secret Chambers<br><br>
-
-🃏 Collectibles & Discoveries
-
-</p>
-
-<br>
-
-<p>
-
-Every object has a story.
-
-<br><br>
-
-Every discovery teaches something real.
-
-</p>
-
-<button onclick="enterVault()">
-
-🔓 Enter Prototype
-
-</button>
-
-<div class="footer">
-
-✨ The Vault is awakening... ✨
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-function enterVault(){
-
-document.body.style.transition="2s";
-
-document.body.style.background="#00111f";
-
-document.querySelector("button").innerHTML="Coming Soon...";
-
-if(navigator.vibrate){
-
-navigator.vibrate(150);
-
-}
-
-}
-
-</script>
-
-</body>
-
-</html>
+.container{
+position:relative;
+z-index:2;
+width:
