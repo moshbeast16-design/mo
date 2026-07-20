@@ -2,214 +2,210 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>The Vault</title>
 
 <style>
 
-*{
+html,body{
 margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-background:#020814;
-color:white;
 overflow:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+background:#000814;
+font-family:Arial,sans-serif;
+color:white;
+height:100%;
 }
 
-/* Animated Stars */
-
-body::before{
-content:"";
+canvas{
 position:fixed;
 top:0;
 left:0;
-width:200%;
-height:200%;
-background:
-radial-gradient(white 1px, transparent 1px);
-background-size:60px 60px;
-animation:stars 140s linear infinite;
-opacity:.75;
 }
 
-@keyframes stars{
-from{transform:translateY(0);}
-to{transform:translateY(-1200px);}
-}
-
-.container{
-position:relative;
-z-index:2;
-width:90%;
-max-width:700px;
+#content{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
 text-align:center;
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(10px);
-padding:40px;
-border-radius:25px;
-border:1px solid rgba(255,255,255,.12);
-box-shadow:0 0 40px rgba(0,220,255,.15);
-}
-
-.crystal{
-font-size:80px;
-animation:float 4s ease-in-out infinite;
-margin-bottom:10px;
-}
-
-@keyframes float{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-12px);}
+z-index:5;
 }
 
 h1{
-font-size:58px;
+font-size:70px;
 letter-spacing:8px;
-color:#8defff;
-cursor:pointer;
+margin:0;
+color:#9feeff;
 text-shadow:
-0 0 10px #00d9ff,
-0 0 30px #00d9ff,
-0 0 60px #00d9ff;
+0 0 15px cyan,
+0 0 35px cyan,
+0 0 80px cyan;
+animation:glow 3s infinite;
 }
 
-.subtitle{
-margin:15px 0 30px;
-font-size:20px;
-opacity:.85;
+@keyframes glow{
+
+0%{text-shadow:0 0 15px cyan;}
+50%{text-shadow:0 0 50px cyan;}
+100%{text-shadow:0 0 15px cyan;}
+
 }
 
-.section{
-font-size:18px;
-line-height:2;
+p{
+
+font-size:22px;
+opacity:.9;
+
 }
 
 button{
+
 margin-top:35px;
 padding:18px 45px;
+font-size:22px;
 border:none;
 border-radius:50px;
 background:#00d9ff;
-color:#00131a;
-font-size:22px;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
 transition:.3s;
+
 }
 
 button:hover{
-transform:scale(1.05);
-box-shadow:0 0 25px cyan;
+
+transform:scale(1.08);
+
 }
 
-.footer{
-margin-top:25px;
-font-size:14px;
-opacity:.6;
-font-style:italic;
+#status{
+
+margin-top:30px;
+font-size:20px;
+color:#8cefff;
+
 }
 
-#message{
-margin-top:25px;
-font-size:18px;
-color:#8defff;
-display:none;
+#quartz{
+
+position:absolute;
+bottom:60px;
+left:50%;
+transform:translateX(-50%);
+font-size:90px;
+animation:float 3s ease-in-out infinite;
+cursor:pointer;
+
+}
+
+@keyframes float{
+
+0%,100%{transform:translateX(-50%) translateY(0);}
+50%{transform:translateX(-50%) translateY(-15px);}
+
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<canvas id="stars"></canvas>
 
-<div class="crystal">💎</div>
+<div id="content">
 
-<h1 id="vaultTitle">THE VAULT</h1>
+<h1>THE VAULT</h1>
 
-<div class="subtitle">
-A hidden world where curiosity unlocks reality.
-</div>
+<p>A hidden world where curiosity unlocks reality.</p>
 
-<div class="section">
-
-<h2>🚧 UNDER CONSTRUCTION 🚧</h2>
-
-<br>
-
-A new world is taking shape.
-
-<br><br>
-
-💎 Rare Minerals<br>
-🐾 Extraordinary Animals<br>
-📚 Wisdom & Knowledge<br>
-🌍 The Wonders of Earth<br>
-🌌 Hidden Places<br>
-🏛️ Secret Chambers<br>
-🃏 Collectibles<br>
-👓 The Optics Workshop
-
-<br><br>
-
-<b>Every object has a story.</b>
-
-<br>
-
-<b>Every discovery teaches something real.</b>
-
-</div>
-
-<button onclick="enterVault()">
-🔓 ENTER PROTOTYPE
+<button onclick="enter()">
+ENTER
 </button>
 
-<div id="message"></div>
-
-<div class="footer">
-✨ Look closely... not everything is obvious. ✨
-</div>
+<div id="status"></div>
 
 </div>
+
+<div id="quartz">💎</div>
 
 <script>
 
-function enterVault(){
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
 
-if(navigator.vibrate){
-navigator.vibrate([100,50,100]);
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let stars=[];
+
+for(let i=0;i<220;i++){
+
+stars.push({
+
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+
+});
+
 }
 
-const msg=document.getElementById("message");
-msg.style.display="block";
+function draw(){
 
-let steps=[
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+for(let s of stars){
+
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+
+s.y+=0.25;
+
+if(s.y>canvas.height){
+
+s.y=0;
+s.x=Math.random()*canvas.width;
+
+}
+
+}
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+function enter(){
+
+const status=document.getElementById("status");
+
+let text=[
+
 "Searching...",
 "Locating The Vault...",
-"Initializing...",
-"The Vault is still awakening...",
-"Thank you for visiting, Explorer."
+"Synchronizing...",
+"Connection Established.",
+"Welcome, Explorer."
+
 ];
 
 let i=0;
 
-msg.innerHTML=steps[0];
+status.innerHTML=text[0];
 
 let timer=setInterval(()=>{
 
 i++;
 
-if(i<steps.length){
+if(i<text.length){
 
-msg.innerHTML=steps[i];
+status.innerHTML=text[i];
 
 }else{
 
@@ -217,21 +213,15 @@ clearInterval(timer);
 
 }
 
-},1400);
+},1200);
 
 }
 
-let taps=0;
+document.getElementById("quartz").onclick=function(){
 
-document.getElementById("vaultTitle").onclick=function(){
-
-taps++;
-
-if(taps==10){
-
-alert("🏅 Achievement Unlocked!\n\nCurious Explorer\n\nYou looked a little closer than most.");
-
-}
+alert(
+"💎 Discovery #1\n\nQuartz\n\nOne of Earth's most common minerals.\n\nKnowledge is your greatest treasure."
+);
 
 };
 
