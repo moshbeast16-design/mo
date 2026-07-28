@@ -2,230 +2,1243 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Vault</title>
+<title>AMS Vault | Derek Jeter #98 Archive</title>
 
+  
+  
 <style>
 
-html,body{
-margin:0;
-overflow:hidden;
-background:#000814;
-font-family:Arial,sans-serif;
-color:white;
-height:100%;
+* {
+  box-sizing: border-box;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
+html {
+  scroll-behavior: smooth;
 }
 
-#content{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-z-index:5;
+body {
+  margin: 0;
+  background: #080808;
+  color: #f4f0e8;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-h1{
-font-size:70px;
-letter-spacing:8px;
-margin:0;
-color:#9feeff;
-text-shadow:
-0 0 15px cyan,
-0 0 35px cyan,
-0 0 80px cyan;
-animation:glow 3s infinite;
+button,
+input {
+  font-family: inherit;
 }
 
-@keyframes glow{
+/* HEADER */
 
-0%{text-shadow:0 0 15px cyan;}
-50%{text-shadow:0 0 50px cyan;}
-100%{text-shadow:0 0 15px cyan;}
+header {
+  padding: 55px 22px 40px;
+  text-align: center;
+  border-bottom: 1px solid #292929;
+}
+
+.small {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #777;
+  margin-bottom: 14px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(38px, 11vw, 70px);
+  letter-spacing: 7px;
+  font-weight: 500;
+}
+
+.gold {
+  color: #d8b45a;
+}
+
+.subtitle {
+  margin: 16px auto 0;
+  color: #888;
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: 1px;
+  max-width: 520px;
+}
+
+/* STATS */
+
+.stats {
+  max-width: 900px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid #222;
+}
+
+.stat {
+  padding: 25px 5px;
+  text-align: center;
+  border-right: 1px solid #222;
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.stat strong {
+  display: block;
+  color: #d8b45a;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.stat span {
+  color: #666;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+}
+
+/* MAIN */
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 45px 18px 90px;
+}
+
+.section-label {
+  color: #777;
+  font-size: 9px;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 27px;
+  font-weight: 500;
+}
+
+.intro {
+  color: #888;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+/* SEARCH */
+
+.search {
+  width: 100%;
+  background: #101010;
+  border: 1px solid #292929;
+  color: white;
+  padding: 15px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.search:focus {
+  border-color: #d8b45a;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.filter {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid #333;
+  color: #888;
+  padding: 9px 13px;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.filter.active {
+  color: #080808;
+  background: #d8b45a;
+  border-color: #d8b45a;
+}
+
+/* GRID */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: #101010;
+  border: 1px solid #252525;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+
+
+.image-box {
+  position: relative;
+  background: #161616;
+  aspect-ratio: 2.5 / 3.5;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  background: rgba(0,0,0,.88);
+  border: 1px solid #555;
+  padding: 5px 7px;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.info {
+  padding: 13px;
+}
+
+.category {
+  color: #d8b45a;
+  font-size: 7px;
+  letter-spacing: 2px;
+}
+
+.info h3 {
+  margin: 7px 0 5px;
+  font-size: 14px;
+}
+
+.info p {
+  margin: 0;
+  color: #777;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* EMPTY SEARCH */
+
+#emptyMessage {
+  display: none;
+  color: #777;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+/* RECORD */
+
+.record {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #080808;
+  overflow-y: auto;
+}
+
+.record-inner {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding: 25px 18px 70px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 10px 0 28px;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.record-label {
+  color: #777;
+  font-size: 9px;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+.record h2 {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.record-rarity {
+  color: #d8b45a;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.record-image {
+  width: 100%;
+  max-height: 650px;
+  object-fit: contain;
+  background: #111;
+  border: 1px solid #292929;
+  display: block;
+  margin-bottom: 28px;
+}
+
+.record-description {
+  color: #aaa;
+  line-height: 1.7;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+/* RECORD DATA */
+
+.details {
+  border-top: 1px solid #292929;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid #222;
+}
+
+.detail span {
+  color: #666;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+.detail strong {
+  color: #ddd;
+  font-size: 11px;
+  text-align: right;
+}
+
+/* NOTES */
+
+.notes {
+  margin-top: 30px;
+  padding: 20px;
+  background: #101010;
+  border: 1px solid #252525;
+}
+
+.notes-title {
+  color: #d8b45a;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.notes p {
+  color: #999;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* FOOTER */
+
+footer {
+  border-top: 1px solid #222;
+  color: #555;
+  padding: 35px 20px;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.8;
+  letter-spacing: 1px;
+}
+
+@media (min-width: 700px) {
+
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  main {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
 
 }
 
-p{
+  
+  /* ===== PREMIUM VAULT RECORD ===== */
 
-font-size:22px;
-opacity:.9;
-
+#record {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(214, 178, 92, 0.08), transparent 32%),
+    #070707;
 }
 
-button{
-
-margin-top:35px;
-padding:18px 45px;
-font-size:22px;
-border:none;
-border-radius:50px;
-background:#00d9ff;
-cursor:pointer;
-font-weight:bold;
-transition:.3s;
-
+.record-inner {
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-button:hover{
-
-transform:scale(1.08);
-
+.record-image {
+  border: 1px solid rgba(214, 178, 92, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 18px 50px rgba(0,0,0,0.65);
 }
 
-#status{
-
-margin-top:30px;
-font-size:20px;
-color:#8cefff;
-
+.record-rarity {
+  color: #d6b25c;
+  letter-spacing: 4px;
+  text-transform: uppercase;
 }
 
-#quartz{
-
-position:absolute;
-bottom:60px;
-left:50%;
-transform:translateX(-50%);
-font-size:90px;
-animation:float 3s ease-in-out infinite;
-cursor:pointer;
-
+.details {
+  border-top: 1px solid rgba(214, 178, 92, 0.22);
 }
 
-@keyframes float{
-
-0%,100%{transform:translateX(-50%) translateY(0);}
-50%{transform:translateX(-50%) translateY(-15px);}
-
+.detail {
+  border-bottom: 1px solid rgba(255,255,255,0.09);
+  padding: 20px 0;
 }
 
+.detail span {
+  letter-spacing: 3px;
+  font-size: 11px;
+  color: #777;
+}
+
+.detail strong {
+  color: #f4f0e8;
+}
+
+.record-description {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #aaa;
+}
+
+.record-notes {
+  border: 1px solid rgba(214, 178, 92, 0.22);
+  background: linear-gradient(
+    145deg,
+    rgba(214,178,92,0.055),
+    rgba(255,255,255,0.015)
+  );
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+  
+  
+  
+  /* VAULT RARITY SYSTEM */
+
+.record-rarity {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #c9a95f;
+    border: 1px solid rgba(201, 169, 95, 0.35);
+    background: rgba(201, 169, 95, 0.04);
+}
+  
+  /* 1/1 VAULT TREATMENT */
+
+body.one-of-one #recordTitle {
+    text-shadow: 0 0 18px rgba(212, 175, 55, 0.22);
+}
+
+body.one-of-one #recordRarity {
+    color: #e2c36d;
+    border-color: rgba(226, 195, 109, 0.65);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.10);
+}
+  /* PREMIUM 1/1 DISPLAY */
+
+body.one-of-one #recordRarity {
+    padding: 10px 16px;
+    color: #f0d27a;
+    border: 1px solid #b99745;
+    background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.16),
+        rgba(212, 175, 55, 0.03)
+    );
+    box-shadow:
+        0 0 20px rgba(212, 175, 55, 0.16),
+        inset 0 0 18px rgba(212, 175, 55, 0.05);
+}
+
+body.one-of-one {
+    background:
+        radial-gradient(
+            circle at 50% 18%,
+            rgba(212, 175, 55, 0.055) 0%,
+            rgba(212, 175, 55, 0.018) 28%,
+            #080808 58%
+        );
+}
+  
+  /* all your existing CSS */
+
+/* PREMIUM 1/1 DISPLAY */
+body.one-of-one #recordRarity {
+    /* ... */
+}
+
+body.one-of-one {
+    /* ... */
+}
+
+  /* GOLD TIER */
+
+body.tier-gold {
+    background:
+        radial-gradient(
+            circle at 50% 18%,
+            rgba(212, 175, 55, 0.08),
+            #080808 58%
+        );
+}
+  /* RARITY REVEAL */
+#rarityReveal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080808;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+#rarityReveal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+#rarityRevealText {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: #d4af37;
+  text-align: center;
+}
+  #rarityRevealText span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: oneOfOneIn 0.45s ease 0.35s forwards;
+}
+
+@keyframes oneOfOneIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  
 </style>
-
 </head>
 
 <body>
+  
+  <div id="rarityReveal">
+  <div id="rarityRevealText"></div>
+</div>
+  
+ 
+  
 
-<canvas id="stars"></canvas>
 
-<div id="content">
+<header>
 
-<h1>THE VAULT</h1>
+  <div class="small">
+    PRIVATE COLLECTION ARCHIVE
+  </div>
 
-<p>A hidden world where curiosity unlocks reality.</p>
+  <h1>
+    AMS <span class="gold">VAULT</span>
+  </h1>
 
-<button onclick="enter()">
-ENTER
-</button>
+  <div class="subtitle">
+    Documenting the many forms of Derek Jeter's
+    iconic 1993 Topps #98 Draft Pick design.
+  </div>
 
-<div id="status"></div>
+</header>
+
+
+<section class="stats">
+
+  <div class="stat">
+    <strong>116+</strong>
+    <span>OWNED</span>
+  </div>
+
+  <div class="stat">
+    <strong>20/20</strong>
+    <span>PROJECT 2020</span>
+  </div>
+
+  <div class="stat">
+    <strong>1/1</strong>
+    <span>RARITIES</span>
+  </div>
+
+</section>
+
+
+<main>
+
+  <div class="section-label">
+    INSIDE THE VAULT
+  </div>
+
+  <h2>Collection Archive</h2>
+
+  <p class="intro">
+    Rare parallels, artist editions, autographs,
+    reprints, relics, customs and unusual descendants
+    of the #98 design.
+  </p>
+
+
+  <input
+    class="search"
+    id="search"
+    type="text"
+    placeholder="Search the vault..."
+    oninput="renderVault()"
+  >
+
+
+  <div class="filters">
+
+    <button
+      class="filter active"
+      onclick="setFilter('ALL', this)">
+      ALL
+    </button>
+
+    <button
+      class="filter"
+      onclick="setFilter('1/1', this)">
+      1/1
+    </button>
+
+    <button
+      class="filter"
+      onclick="setFilter('PROJECT 2020', this)">
+      PROJECT 2020
+    </button>
+
+    <button
+      class="filter"
+      onclick="setFilter('AUTOGRAPH', this)">
+      AUTOGRAPHS
+    </button>
+
+    <button
+      class="filter"
+      onclick="setFilter('PARALLEL', this)">
+      PARALLELS
+    </button>
+
+    <button
+  class="filter"
+  onclick="setFilter('RELIC', this)">
+  RELICS
+    </button>
+    
+    <button
+      class="filter"
+      onclick="setFilter('ART', this)">
+      ART
+    </button>
+
+  </div>
+
+
+  <div class="grid" id="vaultGrid"></div>
+
+  <div id="emptyMessage">
+    No Vault records match this search.
+  </div>
+
+</main>
+
+
+<footer>
+
+  Independent collector archive.<br>
+
+  Not affiliated with Derek Jeter, Topps, MLB,
+  or the New York Yankees.
+
+</footer>
+
+
+<!-- FULL RECORD -->
+
+<div class="record" id="record">
+
+  <div class="record-inner">
+
+    <button class="back" onclick="closeRecord()">
+      ← BACK TO VAULT
+    </button>
+
+    <div class="record-label">
+      VAULT RECORD
+    </div>
+
+    <h2 id="recordTitle"></h2>
+
+    <div
+      class="record-rarity"
+      id="recordRarity">
+    </div>
+
+    <img
+      class="record-image"
+      id="recordImage"
+      alt=""
+    >
+
+    <p
+      class="record-description"
+      id="recordDescription">
+    </p>
+
+
+    <div class="details">
+
+      <div class="detail">
+        <span>VAULT ID</span>
+        <strong id="recordID"></strong>
+      </div>
+
+      <div class="detail">
+        <span>YEAR</span>
+        <strong id="recordYear"></strong>
+      </div>
+
+      <div class="detail">
+        <span>CATEGORY</span>
+        <strong id="recordCategory"></strong>
+      </div>
+
+      <div class="detail">
+        <span>ARTIST / MAKER</span>
+        <strong id="recordArtist"></strong>
+      </div>
+
+      <div class="detail">
+        <span>SERIAL / PRINT RUN</span>
+        <strong id="recordSerial"></strong>
+      </div>
+
+      <div class="detail">
+        <span>AUTOGRAPH</span>
+        <strong id="recordAuto"></strong>
+      </div>
+
+      <div class="detail">
+        <span>STATUS</span>
+        <strong id="recordStatus"></strong>
+      </div>
+
+
+    </div>
+
+
+    <div class="notes">
+
+      <div class="notes-title">
+        VAULT NOTES
+      </div>
+
+      <p id="recordNotes"></p>
+
+    </div>
+
+  </div>
 
 </div>
 
-<div id="quartz">💎</div>
 
 <script>
 
-const canvas=document.getElementById("stars");
-const ctx=canvas.getContext("2d");
+/*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AMS VAULT DATABASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-canvas.width=innerWidth;
-canvas.height=innerHeight;
+THIS is where we add collectibles later.
 
-let stars=[];
+You do NOT need to build new HTML for every card.
 
-for(let i=0;i<220;i++){
+Each object below becomes:
+• a gallery card
+• a searchable item
+• a filterable item
+• its own Vault Record
 
-stars.push({
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*/
 
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2
+const vault = [
 
-});
+  {
+  id: "AMS-001",
 
-}
+  title: "BOBZILLA × Ermsy",
 
-function draw(){
+  year: "2020",
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+  category: "PROJECT 2020",
 
-ctx.fillStyle="white";
+  artist: "BOBZILLA × Ermsy",
 
-for(let s of stars){
+  rarity: "ONE-OF-ONE",
+    
+    tier: "GOLD",
 
-ctx.beginPath();
-ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-ctx.fill();
+  serial: "1/1",
 
-s.y+=0.25;
+  autograph: "Artist Signed",
 
-if(s.y>canvas.height){
+  tags: ["1/1", "PROJECT 2020", "AUTOGRAPHS", "ART"],
 
-s.y=0;
-s.x=Math.random()*canvas.width;
+  status: "IN THE VAULT",
 
-}
+  image: "pictures/IMG_20260725_153411.png",
 
-}
+  description:
+    "A unique one-of-one interpretation connected to Derek Jeter's iconic #98 Draft Pick design.",
 
-requestAnimationFrame(draw);
+  notes:
+    "One of the centerpiece unique pieces in the AMS Vault."
+},
 
-}
 
-draw();
+  /*
+  THESE ARE PLACEHOLDERS.
 
-function enter(){
+  We will replace them with your actual cards
+  and actual photographs.
+  */
 
-const status=document.getElementById("status");
 
-let text=[
+  {
+    id: "AMS-002",
 
-"Searching...",
-"Locating The Vault...",
-"Synchronizing...",
-"Connection Established.",
-"Welcome, Explorer."
+    title: "Gregory Siff “DAVE”",
 
+    year: "2020",
+
+   category: "PROJECT 2020",
+artist: "Gregory Siff",
+rarity: "ONE-OF-ONE",
+serial: "1/1",
+autograph: "Artist Signed",
+
+    description:
+      "Gregory Siff Project 2020 artist-autographed unique piece.",
+
+    notes:
+      "Unique DAVE artist autograph example."
+  },
+{
+  id: "AMS-003",
+  title: "Derek Jeter Custom Die Cut Glove Patch Card",
+  year: "2001",
+  category: "RELIC",
+  artist: "Rewind Cards",
+  rarity: "CUSTOM RELIC",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  
+  notes: "Customized 2001 Topps Archives #6"
+},
+
+  {
+    id: "AMS-004",
+
+    title: "USA Postmark HOF",
+
+    year: "",
+
+    category: "PARALLEL",
+
+    artist: "Topps",
+
+    rarity: "JERSEY NUMBER",
+
+    serial: "02/04",
+
+    autograph: "No",
+
+    status: "IN THE VAULT",
+
+
+    image: "",
+
+    description:
+      "Extremely limited Hall of Fame Postmark issue numbered to only four.",
+
+    notes:
+      "Serial 02/04 matches Derek Jeter's uniform number #2."
+  },
+
+
+  {
+    id: "AMS-005",
+
+    title: "Clearly Authentic",
+
+    year: "",
+
+    category: "AUTOGRAPH",
+
+    artist: "Topps",
+
+    rarity: "JERSEY NUMBER",
+
+    serial: "02/30",
+
+    autograph: "Derek Jeter",
+
+    status: "IN THE VAULT",
+
+
+    image: "",
+
+    description:
+      "Derek Jeter Clearly Authentic autograph from a print run of 30.",
+
+    notes:
+      "Serial 02/30 is the jersey-number copy matching Jeter's #2."
+  },
+{
+  id: "AMS-006",
+  title: "LIQWID Project 2020 AA Cracked Ice / Holofoil",
+  year: "2020",
+  category: "PROJECT 2020",
+  artist: "LIQWID",
+  rarity: "ONE-OF-ONE",
+  serial: "1/1",
+  autograph: "Artist Signed",
+  status: "IN THE VAULT",
+  image: "",
+  description: "Project 2020 artist autograph Cracked Ice / Holofoil one-of-one.",
+  notes: "Unique 1/1 example."
+},
+
+{
+  id: "AMS-007",
+  title: "Ermsy × LIQWID Project 2020 Glitter Foil",
+  year: "2020",
+  category: "PROJECT 2020",
+  artist: "Ermsy × LIQWID",
+  rarity: "ONE-OF-ONE",
+  serial: "1/1",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "Project 2020 Glitter Foil one-of-one.",
+  notes: "Unique 1/1 example."
+},
+  
+{
+  id: "AMS-008",
+  title: "Derek Jeter 60th Anniversary Reprints Game-Used Memorabilia",
+  year: "2011",
+  category: "RELIC",
+  artist: "Topps",
+  rarity: "GAME-USED MEMORABILIA",
+  serial: "22/60",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2011 Topps 60th Anniversary Reprints Derek Jeter #98 featuring game-used memorabilia and the iconic 1993 Draft Pick design.",
+  notes: "One of the most difficult #98 reprints to locate in my collecting experience."
+},
+  {
+  id: "AMS-009",
+  title: "2020 Topps Transcendent Captain's Collection Rookie Buyback",
+  year: "2020",
+  category: "BUYBACK",
+  artist: "Topps",
+  rarity: "LIMITED",
+  serial: "40/40",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2020 Topps Transcendent Captain's Collection Derek Jeter rookie buyback featuring the iconic 1993 Topps #98 Draft Pick card.",
+  notes: "Serial-numbered 40/40, the final-numbered copy. Unsigned Captain's Collection buyback; unsigned examples have been especially difficult to find in my collecting experience."
+},
+  {
+  id: "AMS-010",
+  title: "2014 Topps Rookie Reprints Framed Gold",
+  year: "2014",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "GOLD /25",
+  serial: "14/25",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2014 Topps Rookie Reprints Framed Gold Derek Jeter #20, featuring the iconic 1993 Topps #98 Draft Pick design in a premium gold frame.",
+  notes: "Serial-numbered 14/25. Graded BGS 9 Mint with 9.5 centering, 9 edges, 9.5 corners and 8.5 surface. eBay Authenticity Guarantee authenticated."
+},
 ];
 
-let i=0;
 
-status.innerHTML=text[0];
+/* CURRENT FILTER */
 
-let timer=setInterval(()=>{
+let currentFilter = "ALL";
 
-i++;
 
-if(i<text.length){
+/* BUILD THE GALLERY */
 
-status.innerHTML=text[i];
+function renderVault() {
 
-}else{
+  const grid =
+    document.getElementById("vaultGrid");
 
-clearInterval(timer);
+  const search =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
+
+  grid.innerHTML = "";
+
+
+  const filtered =
+    vault.filter(item => {
+
+      const searchable =
+        (
+          item.title + " " +
+          item.year + " " +
+          item.category + " " +
+          item.artist + " " +
+          item.serial
+        ).toLowerCase();
+
+
+      const matchesSearch =
+        searchable.includes(search);
+
+
+      const matchesFilter =
+  currentFilter === "ALL" ||
+  (item.tags && item.tags.includes(currentFilter));
+
+
+      return matchesSearch && matchesFilter;
+
+    });
+
+
+  filtered.forEach(item => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "card";
+
+    card.onclick =
+      () => openRecord(item.id);
+
+
+    let imageHTML;
+
+    if (item.image) {
+
+      imageHTML =
+        `<img
+          src="${item.image}"
+          alt="${item.title}"
+        >`;
+
+    } else {
+
+      imageHTML =
+        `<div class="placeholder">
+          PHOTO TO ADD
+        </div>`;
+
+    }
+
+
+    card.innerHTML = `
+
+      <div class="image-box">
+
+        ${imageHTML}
+
+        <div class="badge">
+          ${item.serial || item.rarity}
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div class="category">
+          ${item.category}
+        </div>
+
+        <h3>
+          ${item.title}
+        </h3>
+
+        <p>
+          ${item.rarity}
+        </p>
+
+      </div>
+
+    `;
+
+
+    grid.appendChild(card);
+
+  });
+
+
+  document.getElementById(
+    "emptyMessage"
+  ).style.display =
+    filtered.length
+      ? "none"
+      : "block";
 
 }
 
-},1200);
+
+/* FILTER BUTTONS */
+
+function setFilter(filter, button) {
+
+  currentFilter = filter;
+
+
+  document
+    .querySelectorAll(".filter")
+    .forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+
+  button.classList.add("active");
+
+
+  renderVault();
 
 }
 
-document.getElementById("quartz").onclick=function(){
 
-alert(
-"💎 Discovery #1\n\nQuartz\n\nOne of Earth's most common minerals.\n\nKnowledge is your greatest treasure."
-);
+/* OPEN RECORD */
 
-};
+function openRecord(id) {
 
-</script>
+  const item =
+    vault.find(
+      card => card.id === id
+    );
 
-</body>
-</html>
+  if (true) {
+    const reveal = document.getElementById("rarityReveal");
+    const revealText = document.getElementById("rarityRevealText");
+
+    revealText.innerHTML = "ULTIMATE<br><span>ONE OF ONE</span>";
+    
+    reveal.classList.add("show");
+
+    setTimeout(() => {
+        reveal.classList.remove("show");
+    }, 2200);
+}
+  
+  document.body.classList.remove("tier-gold");
+
+if (item.tier === "GOLD") {
+    document.body.classList.add("tier-gold");
+}
+  
+  document.body.classList.remove("one-of-one");
+
+if (item.serial === "1/1") {
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(1000);
+}
+  
+    document.body.classList.add("one-of-one");
+}
+  
+
+  document.getElementById(
+    "recordTitle"
+  ).innerText =
+    item.title;
+
+
+  document.getElementById(
+    "recordRarity"
+  ).innerText =
+    item.rarity +
+    " • " +
+    item.serial;
+
+
+  const image =
+    document.getElementById(
+      "recordImage"
+    );
+
+
+  if (item.image) {
+
+    image.src =
+      item.image;
+
+    image.style.display =
+      "block";
+
+  } else {
+
+  
