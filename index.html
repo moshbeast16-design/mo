@@ -1241,4 +1241,112 @@ if (item.serial === "1/1") {
 
   } else {
 
+    image.style.display =
+      "none";
+
+  }
+
+
+  document.getElementById(
+    "recordDescription"
+  ).innerText =
+    item.description;
+
+
+  document.getElementById(
+    "recordID"
+  ).innerText =
+    item.id;
+
+
+  document.getElementById(
+    "recordYear"
+  ).innerText =
+    item.year || "—";
+
+
+  document.getElementById(
+    "recordCategory"
+  ).innerText =
+    item.category;
+
+
+  document.getElementById(
+    "recordArtist"
+  ).innerText =
+    item.artist;
+
+
+  document.getElementById(
+    "recordSerial"
+  ).innerText =
+    item.serial;
+
+
+  document.getElementById(
+    "recordAuto"
+  ).innerText =
+    item.autograph;
+
+
+  document.getElementById(
+    "recordStatus"
+  ).innerText =
+    item.status;
+
+
+
+
+
+  document.getElementById(
+    "recordNotes"
+  ).innerText =
+    item.notes;
+
+
+  const showRecord = () => {
+  document.getElementById("record").style.display = "block";
+  document.body.style.overflow = "hidden";
+  document.getElementById("record").scrollTop = 0;
+};
+
+if (item.serial === "1/1") {
+  setTimeout(showRecord, 1400);
+} else {
+  showRecord();
+}
+
+}
+
+
+/* CLOSE RECORD */
+
+function closeRecord() {
   
+  const reveal = document.getElementById("rarityReveal");
+reveal.classList.remove("show");
+  
+  document.body.classList.remove("one-of-one");
+
+  document.body.classList.remove("tier-gold");
+  
+  document.getElementById(
+    "record"
+  ).style.display =
+    "none";
+
+
+  document.body.style.overflow =
+    "auto";
+
+}
+
+
+/* INITIAL LOAD */
+
+renderVault();
+
+</script>
+
+</body>
+</html>
