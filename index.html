@@ -180,6 +180,11 @@ h2 {
   border: 1px solid #252525;
   overflow: hidden;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+  .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
 }
 
 
@@ -523,59 +528,40 @@ body.tier-gold {
             #080808 58%
         );
 }
-  /* RARITY REVEAL */
-#rarityReveal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #080808;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
+  .vault-reveal {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+opacity: 0;
+pointer-events: none;
+transition: opacity 1s ease;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
 }
 
-#rarityReveal.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-#rarityRevealText {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-  color: #d4af37;
-  text-align: center;
-}
-  #rarityRevealText span {
-    display: inline-block;
+.vault-text {
+    color: gold;
+    font-size: 3rem;
+    font-weight: 900;
+    text-align: center;
     opacity: 0;
-    transform: translateY(8px);
-    animation: oneOfOneIn 0.45s ease 0.35s forwards;
+  transition: opacity 1s ease;
+text-shadow: 0 0 25px gold;
+  letter-spacing: 0.25em;
+  
 }
-
-@keyframes oneOfOneIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  .ultimate {
+    font-size: 1.35em;
+    display: block;
+    margin-bottom: 0.2em;
 }
   
 </style>
 </head>
 
 <body>
-  
-  <div id="rarityReveal">
-  <div id="rarityRevealText"></div>
-</div>
-  
- 
-  
 
 
 <header>
@@ -636,7 +622,7 @@ body.tier-gold {
     id="search"
     type="text"
     placeholder="Search the vault..."
-    oninput="renderVault()"
+    oninput="debouncedRenderVault()"
   >
 
 
@@ -815,6 +801,31 @@ Each object below becomes:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 */
 
+/*
+NEW CARD TEMPLATE
+
+Copy this object when adding a new Vault record.
+Only use tags for custom filters (ART, etc.) — category,
+serial, and autograph already drive filtering automatically.
+
+{
+  id: "AMS-011",
+  title: "",
+  year: "",
+  category: "",        // PROJECT 2020 / PARALLEL / RELIC / AUTOGRAPH / BUYBACK
+  artist: "",
+  rarity: "",
+  tier: "",             // GOLD (leave blank if none)
+  serial: "",
+  autograph: "No",      // "No" or signer's name
+  status: "IN THE VAULT",
+  tags: [],              // usually only ART or future custom filters
+  image: "",
+  description: "",
+  notes: ""
+}
+*/
+
 const vault = [
 
   {
@@ -836,7 +847,7 @@ const vault = [
 
   autograph: "Artist Signed",
 
-  tags: ["1/1", "PROJECT 2020", "AUTOGRAPHS", "ART"],
+  tags: ["1/1", "PROJECT 2020", "AUTOGRAPH", "ART"],
 
   status: "IN THE VAULT",
 
@@ -1021,12 +1032,371 @@ autograph: "Artist Signed",
   description: "2014 Topps Rookie Reprints Framed Gold Derek Jeter #20, featuring the iconic 1993 Topps #98 Draft Pick design in a premium gold frame.",
   notes: "Serial-numbered 14/25. Graded BGS 9 Mint with 9.5 centering, 9 edges, 9.5 corners and 8.5 surface. eBay Authenticity Guarantee authenticated."
 },
+
+  {
+  id: "AMS-011",
+  title: "Blake Jamieson Auto",
+  year: "",
+  category: "AUTOGRAPH",
+  artist: "Blake Jamieson",
+  rarity: "ARTIST AUTOGRAPH /50",
+  serial: "28/50",
+  autograph: "Blake Jamieson",
+  status: "IN THE VAULT",
+  tags: ["ART"],
+  image: "",
+  description: "Blake Jamieson artist autograph piece connected to the #98 Draft Pick design.",
+  notes: "Serial-numbered 28/50. Several artist pieces include authenticity cards and/or a black painted presentation case."
+},
+
+  {
+  id: "AMS-012",
+  title: "1993 Topps #98 — Jeter Auto",
+  year: "1993",
+  category: "AUTOGRAPH",
+  artist: "Topps",
+  rarity: "GRADED AUTOGRAPH",
+  serial: "N/A",
+  autograph: "Derek Jeter",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps #98 Derek Jeter Draft Pick rookie card, autographed.",
+  notes: "PSA EX-MT 6. PSA/DNA AUTO 10."
+},
+
+  {
+  id: "AMS-013",
+  title: "1993 Topps Gold #98",
+  year: "1993",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "GOLD PARALLEL",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps Gold parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded PSA 9."
+},
+
+  {
+  id: "AMS-014",
+  title: "1993 Topps Micro #98",
+  year: "1993",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "MICRO PARALLEL",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps Micro parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded PSA 5."
+},
+
+  {
+  id: "AMS-015",
+  title: "1993 Rockies Inaugural",
+  year: "1993",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "ROCKIES INAUGURAL",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps Rockies Inaugural parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded SGC 8.5."
+},
+
+  {
+  id: "AMS-016",
+  title: "1993 Marlins Inaugural",
+  year: "1993",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "MARLINS INAUGURAL",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps Marlins Inaugural parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded PSA 6."
+},
+
+  {
+  id: "AMS-017",
+  title: "1993 Topps #98 BCCG 10",
+  year: "1993",
+  category: "BASE",
+  artist: "Topps",
+  rarity: "GRADED BASE",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps #98 Derek Jeter Draft Pick, graded BCCG 10.",
+  notes: "Black-and-white BCCG label."
+},
+
+  {
+  id: "AMS-018",
+  title: "Original Rookie — Grade 9",
+  year: "1993",
+  category: "BASE",
+  artist: "Topps",
+  rarity: "GRADED BASE",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps #98 Derek Jeter Draft Pick rookie card, graded 9.",
+  notes: "Representative original pose/background."
+},
+
+  {
+  id: "AMS-019",
+  title: "1993 Topps Blank Back",
+  year: "1993",
+  category: "BASE",
+  artist: "Topps",
+  rarity: "BLANK BACK",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 Topps blank-back variation of the #98 Derek Jeter Draft Pick design.",
+  notes: "PSA authentication declined/cancelled; authenticity uncertain. Kept as part of the collection."
+},
+
+  {
+  id: "AMS-020",
+  title: "\"Pixelated\" 1993 Original-Style Signed Version",
+  year: "1993",
+  category: "BASE",
+  artist: "Topps",
+  rarity: "ORIGINAL-STYLE SIGNED",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "1993 original-style #98 Derek Jeter Draft Pick design with a signed presentation.",
+  notes: "Low-quality image on file. Signature not treated as authenticated."
+},
+
+  {
+  id: "AMS-021",
+  title: "2014 Topps Framed Silver /99",
+  year: "2014",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "SILVER /99",
+  serial: "38/99",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2014 Topps Rookie Reprints Framed Silver Derek Jeter, featuring the iconic 1993 Topps #98 Draft Pick design.",
+  notes: "Serial-numbered 38/99."
+},
+
+  {
+  id: "AMS-022",
+  title: "2014 Topps Framed Black /199",
+  year: "2014",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "BLACK /199",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2014 Topps Rookie Reprints Framed Black Derek Jeter, featuring the iconic 1993 Topps #98 Draft Pick design.",
+  notes: "Print run of 199; individual copy number not on file."
+},
+
+  {
+  id: "AMS-023",
+  title: "2014 Topps Chrome All-Time Rookie Reprint",
+  year: "2014",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "CHROME ALL-TIME REPRINT",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2014 Topps Chrome All-Time Rookie Reprint of the #98 Derek Jeter Draft Pick design.",
+  notes: ""
+},
+
+  {
+  id: "AMS-024",
+  title: "2014 Rookie Reprint Mini",
+  year: "2014",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "MINI",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2014 mini reprint of the #98 Derek Jeter Draft Pick design.",
+  notes: ""
+},
+
+  {
+  id: "AMS-025",
+  title: "2001 Future Rookie Reprint Gold Border",
+  year: "2001",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "GOLD BORDER",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2001 Topps Future Rookie Reprint Gold Border of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded PSA 9."
+},
+
+  {
+  id: "AMS-026",
+  title: "2001 Future Archives Refractor",
+  year: "2001",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "REFRACTOR",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2001 Topps Future Archives Refractor of the #98 Derek Jeter Draft Pick design.",
+  notes: "Graded PSA 10."
+},
+
+  {
+  id: "AMS-027",
+  title: "2001 Topps Traded Chrome Retrofractor Rookie",
+  year: "2001",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "RETROFRACTOR",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2001 Topps Traded Chrome Retrofractor Rookie of the #98 Derek Jeter Draft Pick design.",
+  notes: ""
+},
+
+  {
+  id: "AMS-028",
+  title: "2017 Chrome Blue Border",
+  year: "2017",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "BLUE BORDER",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2017 Topps Chrome Blue Border parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: ""
+},
+
+  {
+  id: "AMS-029",
+  title: "2017 Chrome Green Border /50",
+  year: "2017",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "GREEN BORDER /50",
+  serial: "14/50",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2017 Topps Chrome Green Border parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Serial-numbered 14/50."
+},
+
+  {
+  id: "AMS-030",
+  title: "2019 Chrome Gold Border /50",
+  year: "2019",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "GOLD BORDER /50",
+  serial: "35/50",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2019 Topps Chrome Gold Border parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Serial-numbered 35/50."
+},
+
+  {
+  id: "AMS-031",
+  title: "2019 Chrome Orange Border /25",
+  year: "2019",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "ORANGE BORDER /25",
+  serial: "20/25",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2019 Topps Chrome Orange Border parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Serial-numbered 20/25."
+},
+
+  {
+  id: "AMS-032",
+  title: "2019 Chrome White Border",
+  year: "2019",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "WHITE BORDER",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2019 Topps Chrome White Border parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: ""
+},
+
+  {
+  id: "AMS-033",
+  title: "2019 Chrome Medallion",
+  year: "2019",
+  category: "PARALLEL",
+  artist: "Topps",
+  rarity: "MEDALLION",
+  serial: "N/A",
+  autograph: "No",
+  status: "IN THE VAULT",
+  image: "",
+  description: "2019 Topps Chrome Medallion parallel of the #98 Derek Jeter Draft Pick design.",
+  notes: "Regular/non-Gold Border medallion parallel."
+},
 ];
 
 
 /* CURRENT FILTER */
 
 let currentFilter = "ALL";
+
+
+/* DEBOUNCE HELPER (for search input) */
+
+function debounce(fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const debouncedRenderVault = debounce(renderVault, 200);
 
 
 /* BUILD THE GALLERY */
@@ -1063,6 +1433,9 @@ function renderVault() {
 
       const matchesFilter =
   currentFilter === "ALL" ||
+  item.category === currentFilter ||
+  item.serial === currentFilter ||
+  (currentFilter === "AUTOGRAPH" && item.autograph && item.autograph !== "No") ||
   (item.tags && item.tags.includes(currentFilter));
 
 
@@ -1090,6 +1463,7 @@ function renderVault() {
         `<img
           src="${item.image}"
           alt="${item.title}"
+          loading="lazy"
         >`;
 
     } else {
@@ -1180,23 +1554,37 @@ function openRecord(id) {
       card => card.id === id
     );
 
-  if (true) {
-    const reveal = document.getElementById("rarityReveal");
-    const revealText = document.getElementById("rarityRevealText");
-
-    revealText.innerHTML = "ULTIMATE<br><span>ONE OF ONE</span>";
+  if (item.serial === "1/1") {
+  
     
-    reveal.classList.add("show");
+    const vaultReveal = document.getElementById("vaultReveal");
+const vaultText = document.querySelector(".vault-text");
+
+    
+
+    vaultReveal.style.opacity = "1";
+
+setTimeout(() => {
+    vaultText.style.opacity = "1";
+}, 300);
 
     setTimeout(() => {
-        reveal.classList.remove("show");
-    }, 2200);
+    vaultText.style.opacity = "0";
+
+    setTimeout(() => {
+        vaultReveal.style.opacity = "0";
+      
+    }, 1000);
+
+}, 3000);
 }
   
   document.body.classList.remove("tier-gold");
 
 if (item.tier === "GOLD") {
+    setTimeout(() => {
     document.body.classList.add("tier-gold");
+}, 3000);
 }
   
   document.body.classList.remove("one-of-one");
@@ -1204,7 +1592,7 @@ if (item.tier === "GOLD") {
 if (item.serial === "1/1") {
   
   if (navigator.vibrate) {
-    navigator.vibrate(1000);
+    navigator.vibrate([80, 60, 160]);
 }
   
     document.body.classList.add("one-of-one");
@@ -1323,9 +1711,6 @@ if (item.serial === "1/1") {
 
 function closeRecord() {
   
-  const reveal = document.getElementById("rarityReveal");
-reveal.classList.remove("show");
-  
   document.body.classList.remove("one-of-one");
 
   document.body.classList.remove("tier-gold");
@@ -1348,5 +1733,13 @@ renderVault();
 
 </script>
 
+  <div id="vaultReveal" class="vault-reveal">
+  <div class="vault-text">
+    <span class="ultimate">ULTIMATE</span><br>
+    ONE OF ONE
+</div>
+</div>
+  
+  
 </body>
 </html>
